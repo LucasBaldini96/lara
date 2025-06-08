@@ -18,21 +18,36 @@ noButton.addEventListener('touchstart', moveButton);
 yesButton.addEventListener('click', () => {
   bearOverlay.style.display = 'flex';
 
-  setTimeout(() => {
-    document.getElementById('mainView').style.display = 'none';
-    document.getElementById('secondView').style.display = 'flex';
-    bearOverlay.style.display = 'none';
-    startHeartRain();
-
-    // 🔊 desmuta e dá play automático após clique
+  // Toca a música o mais cedo possível
+  try {
     bgMusic.muted = false;
-    bgMusic.play().catch((e) => {
-      console.warn('⚠️ Música bloqueada, tente clicar no botão 🔊');
-    });
+    bgMusic.play()
+      .then(() => {
+        toggleMusic.innerText = '🔊';
+      })
+      .catch((e) => {
+        console.warn('⚠️ Música bloqueada, tente clicar no botão 🔊');
+      });
+  } catch (e) {
+    console.error('Erro ao tentar tocar a música:', e);
+  }
 
-    toggleMusic.innerText = '🔊';
+  // Vai pra segunda view depois de 2.5s
+  setTimeout(() => {
+    const mainView = document.getElementById('mainView');
+    const secondView = document.getElementById('secondView');
+    if (mainView && secondView && bearOverlay) {
+      mainView.style.display = 'none';
+      secondView.style.display = 'flex';
+      bearOverlay.style.display = 'none';
+      startHeartRain();
+    } else {
+      console.error('❌ Elementos da view não encontrados');
+    }
   }, 2500);
 });
+
+
 
 toggleMusic.addEventListener('click', () => {
   if (bgMusic.paused) {
