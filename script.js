@@ -41,13 +41,27 @@ yesButton.addEventListener('click', () => {
       secondView.style.display = 'flex';
       bearOverlay.style.display = 'none';
       startHeartRain();
+
+      // Agora o botão existe, adiciona o evento aqui
+      const botaoWhats = document.getElementById('enviarWhats');
+      if (botaoWhats) {
+        botaoWhats.addEventListener('click', () => {
+          const mensagem = document.getElementById('respostaTexto').value.trim();
+          if (!mensagem) {
+            alert('Por favor, escreva algo antes de enviar ❤️');
+            return;
+          }
+          const numero = '5514997087118';
+          const link = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+          window.open(link, '_blank');
+        });
+      }
+
     } else {
       console.error('❌ Elementos da view não encontrados');
     }
   }, 2500);
 });
-
-
 
 toggleMusic.addEventListener('click', () => {
   if (bgMusic.paused) {
